@@ -1,0 +1,11 @@
+mx\edu\uacm\is\slt\proyectopolizas\ProyectoPolizasApplication.class
+mx\edu\uacm\is\slt\proyectopolizas\repository\BeneficiarioRepository.class
+mx\edu\uacm\is\slt\proyectopolizas\service\ConsistenciaService.class
+mx\edu\uacm\is\slt\proyectopolizas\model\Cliente.class
+mx\edu\uacm\is\slt\proyectopolizas\model\Beneficiario.class
+mx\edu\uacm\is\slt\proyectopolizas\controller\PolizaController.class
+mx\edu\uacm\is\slt\proyectopolizas\repository\PolizaRepository.class
+mx\edu\uacm\is\slt\proyectopolizas\model\Poliza.class
+mx\edu\uacm\is\slt\proyectopolizas\repository\ClienteRepository.class
+mx\edu\uacm\is\slt\proyectopolizas\config\DataLoader.class
+mx\edu\uacm\is\slt\proyectopolizas\service\RemotePolizaService.class

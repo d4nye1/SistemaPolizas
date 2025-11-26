@@ -1,0 +1,84 @@
+Práctica 2 - Pasos y código de ejemplo (por reactivo)
+Proyecto: proyectoPolizasUACM (H2 en memoria, NetBeans)
+
+Contenido:
+- Estructura del proyecto (pom.xml, application.properties)
+- Código fuente (entidades, repositorios, controladores, servicios)
+- Cómo ejecutar en NetBeans
+- Pruebas básicas con curl / Postman
+
+--- Reactivo 4.1: Estrategia de trabajo colaborativo (Git)
+- Crear repositorio remoto (GitHub/GitLab).
+- Definir ramas protegidas:
+  * main  -> versión de producción (protegida).
+  * develop -> candidate / rama secundaria (protegida).
+  * feature/<tu-nombre>-<tarea> -> ramas de trabajo.
+- No hacer push directo a main ni a develop; usar Merge Requests / Pull Requests.
+- Asegurar revisión de QA antes de merge a develop; y merge a main sólo al lanzar.
+- Evidencia requerida: captura de la configuración de ramas protegidas en el repositorio remoto.
+
+--- Reactivo 4.2: Prototipo de media fidelidad - Operaciones REST
+Ejemplos incluidos en el proyecto: PolizaController.java
+
+GET /polizas
+  - Devuelve todas las pólizas guardadas (en H2).
+  - Ejemplo: curl http://localhost:8080/polizas
+
+GET /polizas/{clave}
+  - Devuelve una póliza por su clave.
+  - Ejemplo: curl http://localhost:8080/polizas/POL-0001
+
+POST /polizas
+  - Crea una póliza. Envía JSON en el body.
+  - Ejemplo:
+    curl -X POST -H "Content-Type: application/json" -d '{"clave":"POL-0002","tipo":1,"monto":50000,"descripcion":"Seguro vida","cliente": {"curp":"BBBB020202HDFRRL09"}}' http://localhost:8080/polizas
+
+PUT /polizas/{clave}
+  - Actualiza una póliza existente (tipo, monto, descripcion).
+
+DELETE /polizas/{clave}
+  - Elimina la póliza indicada.
+
+--- Reactivo 4.3: Implementación de modelos con ORM (Spring Data JPA)
+Clases de ejemplo:
+- mx.edu.uacm.is.slt.proyectopolizas.model.Cliente
+- mx.edu.uacm.is.slt.proyectopolizas.model.Poliza
+- mx.edu.uacm.is.slt.proyectopolizas.model.Beneficiario
+
+Repositorios:
+- PolizaRepository, ClienteRepository, BeneficiarioRepository (extienden JpaRepository)
+
+Consejos:
+- Anota las relaciones (ManyToOne, OneToMany) como en el proyecto.
+- Usa cascade cuando quieras que se propaguen persistencias.
+- Para pruebas, H2 con spring.jpa.hibernate.ddl-auto=create-drop facilita el ciclo.
+
+--- Reactivo 4.4: Funciones para la consistencia entre repositorios
+Implementación de ejemplo en ConsistenciaService.java:
+- verificarConsistenciaPorClave(clave): compara campos esenciales (tipo y monto)
+  entre la póliza local y la póliza simulada remota (RemotePolizaService).
+
+Estrategia recomendada:
+- Retornar boolean (true=consistente, false=inconsistente).
+- Registrar las discrepancias en un log o tabla de auditoría.
+- Definir políticas: qué hacer si hay inconsistencia (marcar para revisión, sobrescribir, etc.)
+
+--- Reactivo 4.5: Cierre de hito (documento)
+El cierre de hito debe incluir:
+- Portada con integrantes y matrículas.
+- Roles del equipo y líderes.
+- Umbral para votaciones.
+- Estándar del negocio y objetivos completados.
+- Evidencias (capturas de ramas protegidas, logs de CI si aplica).
+- Reporte de retrospectiva (fecha, asistentes, observaciones, acciones a tomar).
+- Breves reportes sobre: prototipo, modelos y funciones de consistencia.
+
+--- Cómo abrir y ejecutar en NetBeans
+1) Descarga y descomprime el zip proyectoPolizasUACM.zip
+2) En NetBeans: File -> Open Project -> selecciona la carpeta del proyecto (donde está el pom.xml)
+3) Ejecuta la clase ProyectoPolizasApplication (Run)
+4) Usa Postman o curl para probar los endpoints (ver README.md para detalles)
+
+--- Notas finales
+- El proyecto es un prototipo educativo: sirve para demostrar los verbos REST y la persistencia JPA.
+- Para producción, reemplazar RemotePolizaService por un cliente REST real y usar PostgreSQL.
