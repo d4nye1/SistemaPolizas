@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Pólizas UACM</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+
+        header {
+            background: #002f6c;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .contenedor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 80px);
+        }
+
+        .panel {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: grid;
+            gap: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .panel a {
+            text-decoration: none;
+        }
+
+        .panel button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #004aad;
+            color: white;
+            transition: background 0.3s ease;
+        }
+
+        .panel button:hover {
+            background: #0066cc;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Sistema de Pólizas UACM
+</header>
+
+<div class="contenedor">
+    <div class="panel">
+        <a href="cliente.html">
+            <button>Nuevo Cliente</button>
+        </a>
+
+        <a href="poliza.html">
+            <button>Modificar Póliza</button>
+        </a>
+
+        <a href="beneficiarios.html">
+            <button>Modificar Beneficiario</button>
+        </a>
+
+        <a href="lista-polizas.html">
+            <button>Información de Póliza</button>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

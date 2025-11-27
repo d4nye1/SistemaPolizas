@@ -1,0 +1,15 @@
+mx\edu\uacm\is\slt\as\sistpolizas\model\Beneficiario.class
+mx\edu\uacm\is\slt\as\sistpolizas\controller\BeneficiarioController.class
+mx\edu\uacm\is\slt\as\sistpolizas\model\Poliza.class
+mx\edu\uacm\is\slt\as\sistpolizas\repository\BeneficiarioRepository.class
+mx\edu\uacm\is\slt\as\sistpolizas\SistpolizasApplication.class
+mx\edu\uacm\is\slt\as\sistpolizas\exception\RestExceptionHandler.class
+mx\edu\uacm\is\slt\as\sistpolizas\controller\ClienteController.class
+mx\edu\uacm\is\slt\as\sistpolizas\service\PolizaService.class
+mx\edu\uacm\is\slt\as\sistpolizas\service\BeneficiarioService.class
+mx\edu\uacm\is\slt\as\sistpolizas\model\Cliente.class
+mx\edu\uacm\is\slt\as\sistpolizas\controller\PolizaRestController.class
+mx\edu\uacm\is\slt\as\sistpolizas\service\ClienteService.class
+mx\edu\uacm\is\slt\as\sistpolizas\repository\ClienteRepository.class
+mx\edu\uacm\is\slt\as\sistpolizas\controller\PolizaController.class
+mx\edu\uacm\is\slt\as\sistpolizas\repository\PolizaRepository.class

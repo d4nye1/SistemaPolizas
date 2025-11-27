@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Registro de póliza</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
+
+    h1 {
+      text-align:center;
+      color:#0d47a1;
+    }
+
+    input {
+      padding: 8px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover { background: #0d47a1; }
+
+    .row { display:flex; gap:10px; }
+    .col { flex:1; }
+
+    .card {
+      border: 1px solid #ccc;
+      padding:16px;
+      margin-bottom:16px;
+      border-radius:10px;
+      background:white;
+    }
+
+    pre {
+      background:#eef3fb;
+      padding:10px;
+      border-radius:6px;
+      overflow:auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Póliza</h1>
+
+<div style="text-align:center; margin-bottom:15px;">
+  <button onclick="window.location.href='index.html'">
+    Volver al menú principal
+  </button>
+</div>
+
+<div class="card">
+  <h3>Crear / Editar Póliza</h3>
+
+  <label>Clave de póliza</label>
+  <input id="clave" placeholder="Clave de póliza"/>
+
+  <label>Tipo</label>
+  <input id="tipo" placeholder="Tipo de póliza"/>
+
+  <label>Monto</label>
+  <input id="monto" type="number" step="0.01" placeholder="0.00"/>
+
+  <label>Descripción</label>
+  <input id="descripcion" placeholder="Descripción"/>
+
+  <label>CURP del cliente</label>
+  <input id="curpCliente" maxlength="18" placeholder="CURP del cliente"/>
+
+  <div class="row">
+    <button id="btnCrear">Crear</button>
+    <button id="btnEditar">Editar póliza</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Operaciones rápidas</h3>
+  <div class="row">
+    <input id="claveBuscar" placeholder="Clave de póliza"/>
+    <button onclick="window.location.href='lista-polizas.html'">Buscar</button>
+    <button id="btnBorrar">Borrar</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Resultado</h3>
+  <pre id="output">Aquí verás la respuesta...</pre>
+</div>
+
+<script>
+const base = '/api/polizas';
+
+function show(text) {
+  document.getElementById('output').textContent = text;
+}
+
+function bloquearCampos(bloquear) {
+  document.getElementById('tipo').disabled = bloquear;
+  document.getElementById('descripcion').disabled = bloquear;
+  document.getElementById('curpCliente').disabled = bloquear;
+  document.getElementById('clave').disabled = bloquear;
+}
+
+function readForm() {
+  return {
+    tipo: document.getElementById('tipo').value.trim(),
+    monto: parseFloat(document.getElementById('monto').value.trim()), // convertir a número
+    descripcion: document.getElementById('descripcion').value.trim(),
+    cliente: {
+      curp: document.getElementById('curpCliente').value.trim()
+    }
+  };
+}
+
+
+async function crear() {
+  const data = readForm();
+  const res = await fetch(base, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const body = await res.text();
+  show(body);
+}
+
+async function editar() {
+  const clave = document.getElementById('clave').value.trim();
+  const monto = document.getElementById('monto').value.trim();
+
+  bloquearCampos(true);
+
+  const res = await fetch(base + '/' + encodeURIComponent(clave), {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ monto: monto })
+  });
+
+  const body = await res.text();
+  show("Póliza actualizada correctamente");
+}
+
+async function borrar() {
+  const clave = document.getElementById('claveBuscar').value.trim();
+  if (!clave) { show("Ingresa clave"); return; }
+
+  await fetch(base + '/' + encodeURIComponent(clave), { method: 'DELETE' });
+  show("Póliza eliminada");
+}
+
+document.getElementById('btnCrear').addEventListener('click', crear);
+document.getElementById('btnEditar').addEventListener('click', editar);
+document.getElementById('btnBorrar').addEventListener('click', borrar);
+</script>
+
+</body>
+</html>

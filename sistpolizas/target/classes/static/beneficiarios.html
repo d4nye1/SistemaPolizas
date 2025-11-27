@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Beneficiario</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
+    h1 { text-align:center; color:#0d47a1; }
+    input { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; }
+    button {
+      padding: 10px;
+      margin: 4px 0;
+      width: 100%;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background:#0d47a1; }
+    .row { display:flex; gap:10px; }
+    .col { flex:1; }
+    .card { background:white; padding:16px; border-radius:10px; margin-bottom:16px; }
+    pre { background:#eef3fb; padding:10px; overflow:auto; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+<h1>Beneficiario</h1>
+
+<div style="text-align:center">
+  <button onclick="location.href='index.html'">Volver al menú principal</button>
+</div>
+
+<div class="card">
+  <h3>Crear / Editar Beneficiario</h3>
+  <input type="hidden" id="beneficiarioId">
+
+  <label>Nombres</label>
+  <input id="nombres">
+  <label>Primer apellido</label>
+  <input id="primerApellido">
+  <label>Segundo apellido</label>
+  <input id="segundoApellido">
+  <label>Fecha nacimiento</label>
+  <input type="date" id="fechaNacimiento">
+  <label>Porcentaje de beneficio</label>
+  <input type="number" id="porcentaje">
+  <label>Clave de póliza asociada</label>
+  <input type="number" id="clavePoliza">
+
+  <div class="row">
+    <button onclick="crear()">Crear</button>
+    <button onclick="editar()">Editar</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Buscar Beneficiario</h3>
+
+  <label>Por Nombre Completo</label>
+  <div class="row">
+    <input id="buscarNombre" placeholder="Nombres">
+    <input id="buscarApellido1" placeholder="Primer apellido">
+    <input id="buscarApellido2" placeholder="Segundo apellido">
+  </div>
+  <button onclick="buscarPorNombre()">Buscar por Nombre</button>
+</div>
+
+<div class="card">
+  <h3>Resultado</h3>
+  <pre id="output"></pre>
+</div>
+
+<script>
+const base = "/api/beneficiarios";
+
+function mostrar(text){ document.getElementById('output').textContent = text; }
+
+function obtenerDatos(){
+  return {
+    nombres: nombres.value,
+    primerApellido: primerApellido.value,
+    segundoApellido: segundoApellido.value,
+    fechaNacimiento: fechaNacimiento.value,
+    porcentaje: parseFloat(porcentaje.value),
+    poliza: { clave: parseInt(clavePoliza.value) }
+  };
+}
+
+// CREAR
+async function crear(){
+  const res = await fetch(base,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(obtenerDatos())
+  });
+  const data = await res.json();
+  beneficiarioId.value = data.id;
+  mostrar(formatBeneficiario(data));
+}
+
+// EDITAR
+async function editar(){
+  const id = beneficiarioId.value;
+  if(!id){ mostrar("Selecciona beneficiario"); return; }
+  const res = await fetch(base+"/"+id,{
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(obtenerDatos())
+  });
+  const data = await res.json();
+  mostrar(formatBeneficiario(data));
+}
+
+// BUSCAR POR NOMBRE
+async function buscarPorNombre(){
+  const nombre = buscarNombre.value.trim();
+  const a1 = buscarApellido1.value.trim();
+  const a2 = buscarApellido2.value.trim();
+  if(!nombre || !a1){ mostrar("Debes poner al menos nombre y primer apellido"); return; }
+
+  const url = new URL(base+"/buscar", window.location.origin);
+  url.searchParams.append("nombres", nombre);
+  url.searchParams.append("primerApellido", a1);
+  if(a2) url.searchParams.append("segundoApellido", a2);
+
+  const res = await fetch(url);
+  if(!res.ok){ mostrar("Beneficiario no encontrado"); return; }
+
+  const data = await res.json();
+  cargarFormulario(data);
+
+  mostrar(formatBeneficiario(data));
+}
+
+// BORRAR
+async function borrar(){
+  const id = beneficiarioId.value;
+  if(!id){ mostrar("Selecciona beneficiario"); return; }
+  await fetch(base+"/"+id,{method:'DELETE'});
+  mostrar("Beneficiario eliminado");
+}
+
+// CARGAR FORMULARIO
+function cargarFormulario(data){
+  beneficiarioId.value = data.id;
+  nombres.value = data.nombres;
+  primerApellido.value = data.primerApellido;
+  segundoApellido.value = data.segundoApellido;
+  fechaNacimiento.value = data.fechaNacimiento;
+  porcentaje.value = data.porcentaje;
+
+  // Maneja poliza como objeto o número
+  if(data.poliza){
+    if(typeof data.poliza === 'number'){
+      clavePoliza.value = data.poliza;
+    } else {
+      clavePoliza.value = data.clavePoliza || '';
+    }
+  } else {
+    clavePoliza.value = '';
+  }
+}
+
+// FORMATEAR BENEFICIARIO PARA MOSTRAR SIN { } Y SIN COMILLAS
+function formatBeneficiario(data){
+  const polizaClave = (typeof data.poliza === 'number') ? data.poliza : data.poliza?.clave || 'No asignada';
+  return `BENEFICIARIO ENCONTRADO\n\nNombre: ${data.nombres} ${data.primerApellido} ${data.segundoApellido || ''}\nID: ${data.id}\nPorcentaje: ${data.porcentaje}%\nClave de póliza: ${polizaClave}`;
+}
+</script>
+
+</body>
+</html>

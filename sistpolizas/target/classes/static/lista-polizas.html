@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Información de Pólizas</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
+    h1 { text-align:center; color:#0d47a1; }
+    input {
+      padding: 8px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #0d47a1; }
+    .row { display:flex; gap:10px; }
+    .col { flex:1; }
+
+    .card {
+      border: 1px solid #ccc;
+      padding:16px;
+      margin-bottom:16px;
+      border-radius:10px;
+      background:white;
+    }
+
+    table {
+      width:100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border:1px solid #888;
+      padding:8px;
+      text-align:left;
+    }
+    th {
+      background:#e3ecfa;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Información de Pólizas</h1>
+
+<div style="text-align:center; margin-bottom:15px;">
+  <button onclick="window.location.href='index.html'">Volver al menú principal</button>
+</div>
+
+<div class="card">
+  <h3>Búsqueda de pólizas</h3>
+
+  <label>CURP del cliente</label>
+  <input id="curpCliente" placeholder="Ingresa los 18 caracteres de CURP"/>
+
+  <label>Nombre del cliente</label>
+  <input id="nombreCliente" placeholder="Nombre completo del cliente"/>
+
+  <label>Nombre del beneficiario</label>
+  <input id="nombreBeneficiario" placeholder="Nombre completo del beneficiario"/>
+  
+  <label>Clave de póliza</label>
+  <input id="clavePoliza" placeholder="Ingresa la clave de póliza"/>
+
+  <label>Tipo de póliza</label>
+  <input id="tipoPoliza" placeholder="Automóvil, Vida, Médico"/>
+
+  <label>Fecha de nacimiento beneficiario</label>
+  <input id="fechaNacimiento" type="date"/>
+
+  <div class="row">
+    <button onclick="buscar()">Buscar</button>
+    <button onclick="todas()">Todas las pólizas</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="row">
+    <button onclick="window.location.href='poliza.html'">Registrar nueva póliza</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Resultados</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Clave</th>
+        <th>Tipo</th>
+        <th>Monto</th>
+        <th>Descripción</th>
+        <th>CURP Cliente</th>
+      </tr>
+    </thead>
+    <tbody id="tablaPolizas"></tbody>
+  </table>
+</div>
+
+<script>
+const base = "/api/polizas";
+
+// ✅ FUNCIÓN MEJORADA: ACEPTA LISTA O OBJETO INDIVIDUAL
+function renderTabla(data){
+  const tabla = document.getElementById("tablaPolizas");
+  tabla.innerHTML = "";
+
+  if (!data) {
+    tabla.innerHTML = `<tr><td colspan="5">No se encontraron pólizas</td></tr>`;
+    return;
+  }
+
+  // Si viene un solo objeto, lo convertimos en lista
+  const lista = Array.isArray(data) ? data : [data];
+
+  if (lista.length === 0) {
+    tabla.innerHTML = `<tr><td colspan="5">No se encontraron pólizas</td></tr>`;
+    return;
+  }
+
+  lista.forEach(p => {
+    tabla.innerHTML += `
+      <tr>
+        <td>${p.clave || ''}</td>
+        <td>${p.tipo || ''}</td>
+        <td>${p.monto || ''}</td>
+        <td>${p.descripcion || ''}</td>
+        <td>${p.cliente ? p.cliente.curp : ''}</td>
+      </tr>
+    `;
+  });
+}
+
+// ================= BUSCAR =================
+function buscar(){
+  const curp = document.getElementById("curpCliente").value.trim();
+  const cliente = document.getElementById("nombreCliente").value.trim();
+  const beneficiario = document.getElementById("nombreBeneficiario").value.trim();
+
+  const params = new URLSearchParams();
+  if (curp) params.append("curp", curp);
+  if (cliente) params.append("cliente", cliente);
+  if (beneficiario) params.append("beneficiario", beneficiario);
+
+  const url = base + "/buscar?" + params.toString();
+
+  fetch(url)
+    .then(r => r.json())
+    .then(data => renderTabla(data))
+    .catch(err => {
+      console.error("Error:", err);
+      renderTabla([]);
+    });
+}
+
+// ================= TODAS =================
+function todas(){
+  fetch(base)
+    .then(r => r.json())
+    .then(data => renderTabla(data))
+    .catch(err => {
+      console.error("Error:", err);
+      renderTabla([]);
+    });
+}
+</script>
+
+</body>
+</html>

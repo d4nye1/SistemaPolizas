@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Registro de cliente</title>
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
+
+    h1 {
+      text-align:center;
+      color:#0d47a1;
+    }
+
+    input {
+      padding: 8px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px;
+      margin: 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #0d47a1;
+    }
+
+    .row { display:flex; gap:10px; }
+    .col { flex:1; }
+
+    .card {
+      border: 1px solid #ccc;
+      padding:16px;
+      margin-bottom:16px;
+      border-radius:10px;
+      background:white;
+    }
+
+    pre {
+      background:#eef3fb;
+      padding:10px;
+      border-radius:6px;
+      overflow:auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Cliente</h1>
+<div style="text-align:center; margin-bottom:15px;">
+  <button onclick="window.location.href='index.html'">
+    Volver al menú principal
+  </button>
+</div>
+
+<div class="card">
+  <h3>Crear / Actualizar Cliente</h3>
+  <label>CURP (id)</label>
+  <input id="curp" placeholder="Ingresa 18 caracteres"/>
+
+  <label>Nombres</label>
+  <input id="nombres" placeholder="Ingresa tu nombre(s)"/>
+
+  <label>Primer apellido</label>
+  <input id="primerApellido" placeholder="Ingresa tu apellido"/>
+
+  <label>Segundo apellido (opcional)</label>
+  <input id="segundoApellido" placeholder="Ingresa tu segundo apellido"/>
+
+  <label>Dirección</label>
+  <input id="direccion" placeholder="Calle XXX 123"/>
+
+  <label>Fecha nacimiento (yyyy-mm-dd)</label>
+  <input id="fechaNacimiento" placeholder="1990-04-25"/>
+
+  <div class="row">
+    <button id="btnCrear">Crear</button>
+    <button id="btnActualizar">Actualizar</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Operaciones rápidas</h3>
+  <div class="row">
+    <input id="curpBuscar" placeholder="CURP a buscar"/>
+    <button id="btnBuscar">Buscar</button>
+    <button id="btnBorrar">Borrar</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Resultados de la busqueda</h3>
+  <pre id="output">Aquí verás la respuesta...</pre>
+</div>
+
+<script>
+const base = '/api/clientes';
+
+function show(text) {
+  document.getElementById('output').textContent = text;
+}
+
+async function crear() {
+  const data = readForm();
+  const res = await fetch(base, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const body = await readResponse(res);
+  show(JSON.stringify(body, null, 2));
+}
+
+async function actualizar() {
+  const data = readForm();
+  const curp = data.curp;
+  const res = await fetch(base + '/' + encodeURIComponent(curp), {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const body = await readResponse(res);
+  show(JSON.stringify(body, null, 2));
+}
+
+async function buscar() {
+  const curp = document.getElementById('curpBuscar').value.trim();
+  if (!curp) { show(' Ingresa una CURP'); return; }
+
+  const res = await fetch(base + '/' + encodeURIComponent(curp));
+  const body = await readResponse(res);
+
+  if (!res.ok) {
+    show(" Cliente no encontrado");
+    return;
+  }
+
+  fillForm(body);
+
+  let salida = `CLIENTE ENCONTRADO\n\n`;
+  salida += `Nombre: ${body.nombres} ${body.primerApellido} ${body.segundoApellido || ''}\n`;
+  salida += `CURP: ${body.curp}\n\n`;
+
+  if (body.polizas && body.polizas.length > 0) {
+    salida += "PÓLIZAS ASOCIADAS:\n";
+    body.polizas.forEach(p => {
+      salida += `- Clave: ${p.clave} | Tipo: ${p.tipo} | Monto: $${p.monto}\n`;
+    });
+  } else {
+    salida += "Este cliente no tiene pólizas registradas.";
+  }
+
+  show(salida);
+}
+
+async function borrar() {
+  const curp = document.getElementById('curpBuscar').value.trim();
+  if (!curp) { show('Ingresa CURP'); return; }
+  const res = await fetch(base + '/' + encodeURIComponent(curp), { method: 'DELETE' });
+  show("Cliente eliminado correctamente");
+}
+
+function readForm() {
+  return {
+    curp: document.getElementById('curp').value.trim(),
+    nombres: document.getElementById('nombres').value.trim(),
+    primerApellido: document.getElementById('primerApellido').value.trim(),
+    segundoApellido: document.getElementById('segundoApellido').value.trim() || null,
+    direccion: document.getElementById('direccion').value.trim(),
+    fechaNacimiento: document.getElementById('fechaNacimiento').value.trim()
+  };
+}
+
+function fillForm(data) {
+  if (!data) return;
+  document.getElementById('curp').value = data.curp || '';
+  document.getElementById('nombres').value = data.nombres || '';
+  document.getElementById('primerApellido').value = data.primerApellido || '';
+  document.getElementById('segundoApellido').value = data.segundoApellido || '';
+  document.getElementById('direccion').value = data.direccion || '';
+  document.getElementById('fechaNacimiento').value = data.fechaNacimiento || '';
+}
+
+async function readResponse(res) {
+  let text = await res.text();
+  try { return JSON.parse(text); } catch(e) { return text; }
+}
+
+document.getElementById('btnCrear').addEventListener('click', crear);
+document.getElementById('btnActualizar').addEventListener('click', actualizar);
+document.getElementById('btnBuscar').addEventListener('click', buscar);
+document.getElementById('btnBorrar').addEventListener('click', borrar);
+</script>
+
+</body>
+</html>
