@@ -1,108 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <title>Registro de cliente</title>
-  
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
-
-    h1 {
-      text-align:center;
-      color:#0d47a1;
-    }
-
-    input {
-      padding: 8px;
-      margin: 4px 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    button {
-      padding: 10px;
-      margin: 4px 0;
-      width: 100%;
-      box-sizing: border-box;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #0d47a1;
-    }
-
-    .row { display:flex; gap:10px; }
-    .col { flex:1; }
-
-    .card {
-      border: 1px solid #ccc;
-      padding:16px;
-      margin-bottom:16px;
-      border-radius:10px;
-      background:white;
-    }
-
-    pre {
-      background:#eef3fb;
-      padding:10px;
-      border-radius:6px;
-      overflow:auto;
-    }
-  </style>
+  <title>Registro de Cliente | Sistema de Pólizas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen flex items-center justify-center p-4">
 
-<h1>Cliente</h1>
-<div style="text-align:center; margin-bottom:15px;">
-  <button onclick="window.location.href='index.html'">
-    Volver al menú principal
-  </button>
-</div>
+<div class="w-full max-w-3xl bg-white/95 rounded-2xl shadow-2xl p-8">
 
-<div class="card">
-  <h3>Crear / Actualizar Cliente</h3>
-  <label>CURP (id)</label>
-  <input id="curp" placeholder="Ingresa 18 caracteres"/>
-
-  <label>Nombres</label>
-  <input id="nombres" placeholder="Ingresa tu nombre(s)"/>
-
-  <label>Primer apellido</label>
-  <input id="primerApellido" placeholder="Ingresa tu apellido"/>
-
-  <label>Segundo apellido (opcional)</label>
-  <input id="segundoApellido" placeholder="Ingresa tu segundo apellido"/>
-
-  <label>Dirección</label>
-  <input id="direccion" placeholder="Calle XXX 123"/>
-
-  <label>Fecha nacimiento (yyyy-mm-dd)</label>
-  <input id="fechaNacimiento" placeholder="1990-04-25"/>
-
-  <div class="row">
-    <button id="btnCrear">Crear</button>
-    <button id="btnActualizar">Actualizar</button>
+  <!-- CABECERA -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Gestión de Clientes</h1>
+      <p class="text-sm text-slate-500">Alta, edición y consulta de clientes</p>
+    </div>
+    <button onclick="window.location.href='index.html'"
+      class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-slate-900 transition">
+      Menú principal
+    </button>
   </div>
-</div>
 
-<div class="card">
-  <h3>Operaciones rápidas</h3>
-  <div class="row">
-    <input id="curpBuscar" placeholder="CURP a buscar"/>
-    <button id="btnBuscar">Buscar</button>
-    <button id="btnBorrar">Borrar</button>
+  <!-- FORMULARIO CLIENTE -->
+  <div class="space-y-6">
+
+    <div>
+      <h3 class="text-lg font-semibold text-slate-700 mb-3">Crear / Actualizar cliente</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">CURP</label>
+          <input id="curp" placeholder="18 caracteres"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Fecha de nacimiento</label>
+          <input id="fechaNacimiento" placeholder="1990-04-25"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Nombres</label>
+          <input id="nombres" placeholder="Nombre(s)"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Primer apellido</label>
+          <input id="primerApellido" placeholder="Apellido paterno"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Segundo apellido</label>
+          <input id="segundoApellido" placeholder="Opcional"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Dirección</label>
+          <input id="direccion" placeholder="Calle, número, colonia"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+        </div>
+      </div>
+
+      <div class="flex justify-between pt-4">
+        <button id="btnCrear"
+          class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-semibold transition">
+          Crear
+        </button>
+
+        <button id="btnActualizar"
+          class="px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold transition">
+          Actualizar
+        </button>
+      </div>
+    </div>
+
+    <!-- OPERACIONES RÁPIDAS -->
+    <div>
+      <h3 class="text-lg font-semibold text-slate-700 mb-3">Operaciones rápidas</h3>
+      <div class="flex flex-col md:flex-row gap-4">
+        <input id="curpBuscar" placeholder="CURP a buscar"
+          class="flex-1 rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none" />
+
+        <button id="btnBuscar"
+          class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold transition">
+          Buscar
+        </button>
+
+        <button id="btnBorrar"
+          class="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition">
+          Borrar
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div>
+      <h3 class="text-lg font-semibold text-slate-700 mb-3">Resultado</h3>
+      <pre id="output" class="bg-slate-100 p-4 rounded-xl overflow-auto text-sm">Aquí verás la respuesta...</pre>
+    </div>
+
   </div>
-</div>
-
-<div class="card">
-  <h3>Resultados de la busqueda</h3>
-  <pre id="output">Aquí verás la respuesta...</pre>
 </div>
 
 <script>
@@ -137,13 +139,13 @@ async function actualizar() {
 
 async function buscar() {
   const curp = document.getElementById('curpBuscar').value.trim();
-  if (!curp) { show(' Ingresa una CURP'); return; }
+  if (!curp) { show('Ingresa una CURP'); return; }
 
   const res = await fetch(base + '/' + encodeURIComponent(curp));
   const body = await readResponse(res);
 
   if (!res.ok) {
-    show(" Cliente no encontrado");
+    show("Cliente no encontrado");
     return;
   }
 
@@ -168,7 +170,7 @@ async function buscar() {
 async function borrar() {
   const curp = document.getElementById('curpBuscar').value.trim();
   if (!curp) { show('Ingresa CURP'); return; }
-  const res = await fetch(base + '/' + encodeURIComponent(curp), { method: 'DELETE' });
+  await fetch(base + '/' + encodeURIComponent(curp), { method: 'DELETE' });
   show("Cliente eliminado correctamente");
 }
 

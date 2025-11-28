@@ -1,106 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <title>Registro de póliza</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
-
-    h1 {
-      text-align:center;
-      color:#0d47a1;
-    }
-
-    input {
-      padding: 8px;
-      margin: 4px 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    button {
-      padding: 10px;
-      margin: 4px 0;
-      width: 100%;
-      box-sizing: border-box;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover { background: #0d47a1; }
-
-    .row { display:flex; gap:10px; }
-    .col { flex:1; }
-
-    .card {
-      border: 1px solid #ccc;
-      padding:16px;
-      margin-bottom:16px;
-      border-radius:10px;
-      background:white;
-    }
-
-    pre {
-      background:#eef3fb;
-      padding:10px;
-      border-radius:6px;
-      overflow:auto;
-    }
-  </style>
+  <title>Modificar Póliza | Sistema de Pólizas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen flex items-center justify-center p-4">
 
-<h1>Póliza</h1>
+<div class="w-full max-w-3xl bg-white/95 rounded-2xl shadow-2xl p-8">
 
-<div style="text-align:center; margin-bottom:15px;">
-  <button onclick="window.location.href='index.html'">
-    Volver al menú principal
-  </button>
-</div>
-
-<div class="card">
-  <h3>Crear / Editar Póliza</h3>
-
-  <label>Clave de póliza</label>
-  <input id="clave" placeholder="Clave de póliza"/>
-
-  <label>Tipo</label>
-  <input id="tipo" placeholder="Tipo de póliza"/>
-
-  <label>Monto</label>
-  <input id="monto" type="number" step="0.01" placeholder="0.00"/>
-
-  <label>Descripción</label>
-  <input id="descripcion" placeholder="Descripción"/>
-
-  <label>CURP del cliente</label>
-  <input id="curpCliente" maxlength="18" placeholder="CURP del cliente"/>
-
-  <div class="row">
-    <button id="btnCrear">Crear</button>
-    <button id="btnEditar">Editar póliza</button>
+  <!-- CABECERA -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Gestión de Pólizas</h1>
+      <p class="text-sm text-slate-500">Crear, editar y eliminar pólizas</p>
+    </div>
+    <button onclick="window.location.href='index.html'"
+      class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-slate-900 transition">
+      Menú principal
+    </button>
   </div>
-</div>
 
-<div class="card">
-  <h3>Operaciones rápidas</h3>
-  <div class="row">
-    <input id="claveBuscar" placeholder="Clave de póliza"/>
-    <button onclick="window.location.href='lista-polizas.html'">Buscar</button>
-    <button id="btnBorrar">Borrar</button>
+  <!-- FORMULARIO PRINCIPAL -->
+  <div class="space-y-6">
+
+    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-700 mb-4">Crear / Editar Póliza</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Clave de póliza</label>
+          <input id="clave" placeholder="Clave de póliza"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo</label>
+          <input id="tipo" placeholder="Tipo de póliza"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Monto</label>
+          <input id="monto" type="number" step="0.01" placeholder="0.00"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">CURP del cliente</label>
+          <input id="curpCliente" maxlength="18" placeholder="CURP del cliente"
+            class="w-full rounded-xl border border-slate-300 p-3 tracking-wide focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Descripción</label>
+          <input id="descripcion" placeholder="Descripción"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-6">
+        <button id="btnCrear"
+          class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow transition">
+          Crear póliza
+        </button>
+
+        <button id="btnEditar"
+          class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-semibold shadow transition">
+          Editar póliza
+        </button>
+      </div>
+    </div>
+
+    <!-- OPERACIONES RÁPIDAS -->
+    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-700 mb-4">Operaciones rápidas</h3>
+
+      <div class="flex flex-col md:flex-row gap-4">
+        <input id="claveBuscar" placeholder="Clave de póliza"
+          class="flex-1 rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+
+        <button onclick="window.location.href='lista-polizas.html'"
+          class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+          Buscar
+        </button>
+
+        <button id="btnBorrar"
+          class="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition">
+          Borrar
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-700 mb-2">Resultado</h3>
+      <pre id="output" class="bg-white p-4 rounded-lg shadow-inner overflow-auto text-sm">
+Aquí verás la respuesta...
+      </pre>
+    </div>
+
   </div>
-</div>
-
-<div class="card">
-  <h3>Resultado</h3>
-  <pre id="output">Aquí verás la respuesta...</pre>
 </div>
 
 <script>
@@ -120,14 +123,13 @@ function bloquearCampos(bloquear) {
 function readForm() {
   return {
     tipo: document.getElementById('tipo').value.trim(),
-    monto: parseFloat(document.getElementById('monto').value.trim()), // convertir a número
+    monto: parseFloat(document.getElementById('monto').value.trim()),
     descripcion: document.getElementById('descripcion').value.trim(),
     cliente: {
       curp: document.getElementById('curpCliente').value.trim()
     }
   };
 }
-
 
 async function crear() {
   const data = readForm();

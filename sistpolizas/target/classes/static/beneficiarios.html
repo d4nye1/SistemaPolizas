@@ -1,77 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <title>Beneficiario</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background:#f2f6fc; }
-    h1 { text-align:center; color:#0d47a1; }
-    input { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; }
-    button {
-      padding: 10px;
-      margin: 4px 0;
-      width: 100%;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover { background:#0d47a1; }
-    .row { display:flex; gap:10px; }
-    .col { flex:1; }
-    .card { background:white; padding:16px; border-radius:10px; margin-bottom:16px; }
-    pre { background:#eef3fb; padding:10px; overflow:auto; white-space: pre-wrap; }
-  </style>
+  <title>Gestión de Beneficiarios | Sistema de Pólizas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen flex items-center justify-center p-4">
 
-<h1>Beneficiario</h1>
+<div class="w-full max-w-3xl bg-white/95 rounded-2xl shadow-2xl p-8">
 
-<div style="text-align:center">
-  <button onclick="location.href='index.html'">Volver al menú principal</button>
-</div>
-
-<div class="card">
-  <h3>Crear / Editar Beneficiario</h3>
-  <input type="hidden" id="beneficiarioId">
-
-  <label>Nombres</label>
-  <input id="nombres">
-  <label>Primer apellido</label>
-  <input id="primerApellido">
-  <label>Segundo apellido</label>
-  <input id="segundoApellido">
-  <label>Fecha nacimiento</label>
-  <input type="date" id="fechaNacimiento">
-  <label>Porcentaje de beneficio</label>
-  <input type="number" id="porcentaje">
-  <label>Clave de póliza asociada</label>
-  <input type="number" id="clavePoliza">
-
-  <div class="row">
-    <button onclick="crear()">Crear</button>
-    <button onclick="editar()">Editar</button>
+  <!-- CABECERA -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Gestión de Beneficiarios</h1>
+      <p class="text-sm text-slate-500">Crear, editar y consultar beneficiarios</p>
+    </div>
+    <button onclick="window.location.href='index.html'"
+      class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-slate-900 transition">
+      Menú principal
+    </button>
   </div>
-</div>
 
-<div class="card">
-  <h3>Buscar Beneficiario</h3>
+  <!-- FORMULARIO BENEFICIARIO -->
+  <div class="space-y-6">
 
-  <label>Por Nombre Completo</label>
-  <div class="row">
-    <input id="buscarNombre" placeholder="Nombres">
-    <input id="buscarApellido1" placeholder="Primer apellido">
-    <input id="buscarApellido2" placeholder="Segundo apellido">
+    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-700 mb-4">Crear / Editar Beneficiario</h3>
+      <input type="hidden" id="beneficiarioId">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Nombres</label>
+          <input id="nombres" placeholder="Nombre(s)"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Primer apellido</label>
+          <input id="primerApellido" placeholder="Apellido paterno"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Segundo apellido</label>
+          <input id="segundoApellido" placeholder="Opcional"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Fecha de nacimiento</label>
+          <input type="date" id="fechaNacimiento"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Porcentaje de beneficio</label>
+          <input type="number" id="porcentaje" placeholder="%" step="0.01"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Clave de póliza asociada</label>
+          <input type="number" id="clavePoliza" placeholder="Clave de póliza"
+            class="w-full rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-6">
+        <button onclick="crear()"
+          class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow transition">
+          Crear
+        </button>
+
+        <button onclick="editar()"
+          class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-semibold shadow transition">
+          Editar
+        </button>
+      </div>
+    </div>
+
+    <!-- BUSQUEDA -->
+    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-700 mb-4">Buscar Beneficiario</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <input id="buscarNombre" placeholder="Nombres"
+          class="rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        <input id="buscarApellido1" placeholder="Primer apellido"
+          class="rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+        <input id="buscarApellido2" placeholder="Segundo apellido"
+          class="rounded-xl border border-slate-300 p-3 focus:ring-4 focus:ring-slate-300 focus:outline-none"/>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-4">
+        <button onclick="buscarPorNombre()"
+          class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold transition flex-1">
+          Buscar por Nombre
+        </button>
+        <button onclick="borrar()"
+          class="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition flex-1">
+          Borrar
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-700 mb-2">Resultado</h3>
+      <pre id="output" class="bg-white p-4 rounded-xl shadow-inner overflow-auto text-sm">
+Aquí verás la respuesta...
+      </pre>
+    </div>
+
   </div>
-  <button onclick="buscarPorNombre()">Buscar por Nombre</button>
-</div>
-
-<div class="card">
-  <h3>Resultado</h3>
-  <pre id="output"></pre>
 </div>
 
 <script>
@@ -152,20 +194,16 @@ function cargarFormulario(data){
   segundoApellido.value = data.segundoApellido;
   fechaNacimiento.value = data.fechaNacimiento;
   porcentaje.value = data.porcentaje;
-
-  // Maneja poliza como objeto o número
   if(data.poliza){
     if(typeof data.poliza === 'number'){
       clavePoliza.value = data.poliza;
     } else {
-      clavePoliza.value = data.clavePoliza || '';
+      clavePoliza.value = data.poliza?.clave || '';
     }
-  } else {
-    clavePoliza.value = '';
-  }
+  } else { clavePoliza.value = ''; }
 }
 
-// FORMATEAR BENEFICIARIO PARA MOSTRAR SIN { } Y SIN COMILLAS
+// FORMATEAR BENEFICIARIO
 function formatBeneficiario(data){
   const polizaClave = (typeof data.poliza === 'number') ? data.poliza : data.poliza?.clave || 'No asignada';
   return `BENEFICIARIO ENCONTRADO\n\nNombre: ${data.nombres} ${data.primerApellido} ${data.segundoApellido || ''}\nID: ${data.id}\nPorcentaje: ${data.porcentaje}%\nClave de póliza: ${polizaClave}`;

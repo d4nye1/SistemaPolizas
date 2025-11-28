@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public interface PolizaRepository extends JpaRepository<Poliza, Integer> {
 
     // Buscar por tipo (parcial y case-insensitive)
-List<Poliza> findByTipoContainingIgnoreCase(String tipo);
+    List<Poliza> findByTipoContainingIgnoreCase(String tipo);
 
     // Buscar polizas por curp del cliente (cliente.curp)
     List<Poliza> findByCliente_Curp(String curp);
